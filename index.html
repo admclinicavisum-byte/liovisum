@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Precificação — LIOs · Clínica Visum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --surface2: #f2f1ee;
+      --border: rgba(0,0,0,0.10);
+      --border2: rgba(0,0,0,0.18);
+      --text: #1a1a18;
+      --text2: #6b6b67;
+      --text3: #a0a09c;
+      --blue-bg: #e6f1fb;
+      --blue-text: #185fa5;
+      --blue-border: #b5d4f4;
+      --green: #3b6d11;
+      --amber: #854f0b;
+      --red: #a32d2d;
+      --green-bg: #eaf3de;
+      --amber-bg: #faeeda;
+      --red-bg: #fcebeb;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1a;
+        --surface: #242422;
+        --surface2: #2e2e2b;
+        --border: rgba(255,255,255,0.10);
+        --border2: rgba(255,255,255,0.18);
+        --text: #f0efe9;
+        --text2: #9b9b97;
+        --text3: #6b6b67;
+        --blue-bg: #0c447c;
+        --blue-text: #b5d4f4;
+        --blue-border: #185fa5;
+        --green: #c0dd97;
+        --amber: #fac775;
+        --red: #f7c1c1;
+        --green-bg: #173404;
+        --amber-bg: #412402;
+        --red-bg: #501313;
+      }
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-icon {
+      width: 34px; height: 34px;
+      background: var(--blue-bg);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar-icon i { font-size: 18px; color: var(--blue-text); }
+    .topbar-title { font-size: 15px; font-weight: 600; }
+    .topbar-sub { font-size: 12px; color: var(--text2); margin-left: 2px; }
+    .topbar-date { margin-left: auto; font-size: 12px; color: var(--text3); }
+
+    /* LAYOUT */
+    .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem; }
+
+    /* PANELS */
+    .panel {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .panel-title {
+      font-size: 11px; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* TABS */
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tab {
+      padding: 6px 16px;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab:hover { background: var(--surface2); color: var(--text); }
+    .tab.active {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      border-color: var(--blue-border);
+      font-weight: 500;
+    }
+
+    /* CUSTO GRID */
+    .custo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 8px;
+    }
+    .custo-card {
+      background: var(--surface2);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+    }
+    .custo-card label {
+      display: block;
+      font-size: 11px;
+      color: var(--text2);
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+    .custo-card .brand-hint { color: var(--text3); font-size: 10px; }
+    .custo-card input {
+      width: 100%;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      padding: 5px 9px;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border2);
+      background: var(--surface);
+      color: var(--text);
+      transition: box-shadow 0.15s;
+    }
+    .custo-card input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--blue-border);
+    }
+
+    /* PLAN PARAMS */
+    .plan-params-grid {
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
+    }
+    .pp-group { display: flex; flex-direction: column; gap: 5px; }
+    .pp-group label { font-size: 11px; color: var(--text2); }
+    .pp-group input {
+      font-size: 13px;
+      font-family: inherit;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border2);
+      background: var(--surface);
+      color: var(--text);
+      width: 130px;
+    }
+    .pp-group input:focus { outline: none; box-shadow: 0 0 0 2px var(--blue-border); }
+
+    /* RESULTS TABLE */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      padding: 8px 10px;
+      border-bottom: 0.5px solid var(--border);
+      white-space: nowrap;
+      background: var(--surface);
+      position: sticky; top: 56px;
+    }
+    tbody td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+    tbody tr:hover td { background: var(--surface2); }
+    .brand-row td {
+      background: var(--surface2);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      padding: 5px 10px;
+      letter-spacing: 0.03em;
+    }
+    .money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .pct { font-size: 12px; font-weight: 500; white-space: nowrap; }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .badge-good { background: var(--green-bg); color: var(--green); }
+    .badge-warn { background: var(--amber-bg); color: var(--amber); }
+    .badge-bad  { background: var(--red-bg);   color: var(--red); }
+
+    /* FORMULA BAR */
+    .formula-bar {
+      font-size: 11px;
+      color: var(--text3);
+      padding: 0.75rem 1.5rem;
+      border-top: 0.5px solid var(--border);
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .formula-bar span::before { content: '·  '; }
+
+    /* TOP ROW */
+    .top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .recalc-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border2);
+      background: transparent;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .recalc-btn:hover { background: var(--surface2); }
+
+    @media (max-width: 640px) {
+      .topbar { padding: 0 1rem; }
+      .container { padding: 1rem; }
+      .custo-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-icon"><i class="ti ti-eye" aria-hidden="true"></i></div>
+  <div>
+    <div class="topbar-title">Portal LIOs — Clínica Visum</div>
+    <div class="topbar-sub">Precificação de Lentes Intraoculares</div>
+  </div>
+  <div class="topbar-date" id="hoje"></div>
+</header>
+
+<main class="container">
+
+  <!-- PLANO -->
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-building-hospital" aria-hidden="true"></i> Plano de saúde</div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-plan="0">GEAP</button>
+      <button class="tab" data-plan="1">CELOS</button>
+      <button class="tab" data-plan="2">Postal Saúde</button>
+      <button class="tab" data-plan="3">Unimed</button>
+      <button class="tab" data-plan="4">Particular</button>
+    </div>
+  </div>
+
+  <!-- CUSTOS -->
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-tag" aria-hidden="true"></i> Custo atual das lentes (B) — edite os valores para atualizar</div>
+    <div class="custo-grid" id="custo-grid"></div>
+  </div>
+
+  <!-- PARAMS DO PLANO -->
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Parâmetros do plano</div>
+    <div class="plan-params-grid" id="plan-params"></div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="panel" style="padding: 0; overflow:hidden;">
+    <div style="padding: 1rem 1.5rem 0.75rem; display:flex; align-items:center; justify-content:space-between;">
+      <div class="panel-title" style="margin:0"><i class="ti ti-table" aria-hidden="true"></i> Resultado calculado</div>
+      <button class="recalc-btn" onclick="render()"><i class="ti ti-refresh" aria-hidden="true"></i> Recalcular</button>
+    </div>
+    <div class="table-wrap">
+      <table id="results"></table>
+    </div>
+    <div class="formula-bar">
+      <span>D = 20% sobre A</span>
+      <span>E = A − B − D</span>
+      <span>F = (A − desconto) − B − D</span>
+      <span>G = (A − desconto) − (I × 0,94) − B − D</span>
+      <span>H = (A × 0,94) − B − D</span>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const fmtBRL = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const fmtPct = v => (v * 100).toFixed(1) + '%';
+const badgeClass = v => v >= 0.55 ? 'badge-good' : v >= 0.35 ? 'badge-warn' : 'badge-bad';
+
+const lentes = [
+  {brand:'Johnson & Johnson', nome:'Tecnis One Asférica',         custo:411.83,  cat:'baixo'},
+  {brand:'Johnson & Johnson', nome:'Tecnis One Tórica',           custo:942,     cat:'medio'},
+  {brand:'Johnson & Johnson', nome:'Eyhance Simplicity',          custo:1186.72, cat:'medio'},
+  {brand:'Johnson & Johnson', nome:'Eyhance Tórica Simplicity',   custo:1674.39, cat:'medio'},
+  {brand:'Johnson & Johnson', nome:'Tecnis Puresse EdOF',         custo:3555,    cat:'alto'},
+  {brand:'Johnson & Johnson', nome:'Odyssey Trifocal',            custo:3737.5,  cat:'alto'},
+  {brand:'Alcon',             nome:'Panoptix / Vivity',           custo:3700,    cat:'alto'},
+  {brand:'Alcon',             nome:'Panoptix / Vivity Tórica',    custo:5100,    cat:'alto'},
+  {brand:'Alcon',             nome:'SN60WF',                      custo:550,     cat:'baixo'},
+  {brand:'Zeiss',             nome:'CT Asphina',                  custo:409.5,   cat:'baixo'},
+  {brand:'Zeiss',             nome:'AT Lara 829MP',               custo:2181,    cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lara Toric 929MP',         custo:2396.8,  cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lara Toric 929MP cil +4.5',custo:3602,    cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lisa TRI 839MP',           custo:2926.5,  cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lisa TRI Toric 939MP',     custo:3404.8,  cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lisa TRI Toric cil +4.5',  custo:5961,    cat:'alto'},
+  {brand:'Zeiss',             nome:'CT Lucia',                    custo:411.6,   cat:'medio'},
+  {brand:'Zeiss',             nome:'AT Torbi Tórica',             custo:1237,    cat:'medio'},
+  {brand:'Zeiss',             nome:'AT Torbi cilindro +4,5',      custo:1237,    cat:'medio'},
+  {brand:'Zeiss',             nome:'AT Elana Multifocal Tri',     custo:3328,    cat:'alto'},
+  {brand:'Rayner',            nome:'Rayone EMV',                  custo:895,     cat:'medio'},
+  {brand:'Rayner',            nome:'Rayone EMV Tórica',           custo:1800,    cat:'medio'},
+  {brand:'Rayner',            nome:'Rayone Galaxy',               custo:5700,    cat:'alto'},
+  {brand:'BVI',               nome:'Micropure',                   custo:420,     cat:'baixo'},
+];
+
+const planos = [
+  {nome:'GEAP',         desconto:250,     valorBaixo:3950,   valorMedio:5550,   valorAlto:10550},
+  {nome:'CELOS',        desconto:2115.67, valorBaixo:2084.33,valorMedio:3684.33,valorAlto:8684.33},
+  {nome:'Postal Saúde', desconto:900,     valorBaixo:3300,   valorMedio:4900,   valorAlto:9900},
+  {nome:'Unimed',       desconto:300,     valorBaixo:3900,   valorMedio:5500,   valorAlto:10500},
+  {nome:'Particular',   desconto:0,       valorBaixo:4200,   valorMedio:5800,   valorAlto:10800},
+];
+
+let custos = lentes.map(l => l.custo);
+let currentPlan = 0;
+let planParams = planos.map(p => ({...p}));
+
+document.getElementById('hoje').textContent = 'Atualizado em ' + new Date().toLocaleDateString('pt-BR');
+
+function buildCustoGrid() {
+  const grid = document.getElementById('custo-grid');
+  grid.innerHTML = '';
+  lentes.forEach((l, i) => {
+    const d = document.createElement('div');
+    d.className = 'custo-card';
+    d.innerHTML = `<label>${l.nome}<br><span class="brand-hint">${l.brand}</span></label>
+      <input type="number" step="0.01" value="${custos[i].toFixed(2)}"
+        onchange="custos[${i}]=parseFloat(this.value)||0; render()">`;
+    grid.appendChild(d);
+  });
+}
+
+function buildPlanParams() {
+  const pp = document.getElementById('plan-params');
+  const p = planParams[currentPlan];
+  const isPart = p.nome === 'Particular';
+  const field = (label, key) => `
+    <div class="pp-group">
+      <label>${label}</label>
+      <input type="number" step="0.01" value="${p[key].toFixed(2)}"
+        onchange="planParams[${currentPlan}].${key}=parseFloat(this.value)||0; render()">
+    </div>`;
+  pp.innerHTML = (isPart ? '' : field('Desconto do plano (R$)', 'desconto'))
+    + field('Valor repasse baixo — 4.200 (I)', 'valorBaixo')
+    + field('Valor repasse médio — 5.800 (I)', 'valorMedio')
+    + field('Valor repasse alto — 10.800 (I)', 'valorAlto');
+}
+
+function valA(l) {
+  const p = planParams[currentPlan];
+  return l.cat === 'baixo' ? p.valorBaixo : l.cat === 'medio' ? p.valorMedio : p.valorAlto;
+}
+
+function valI(l) { return valA(l); }
+
+function calc(i) {
+  const l = lentes[i];
+  const p = planParams[currentPlan];
+  const isPart = p.nome === 'Particular';
+  const A = valA(l);
+  const B = custos[i];
+  const D = A * 0.20;
+  const I = valI(l);
+  const desc = isPart ? 0 : p.desconto;
+  const E = A - B - D;
+  const pctE = A ? E / A : 0;
+  const F = isPart ? E : (A - desc) - B - D;
+  const pctF = isPart ? pctE : (A - desc) ? F / (A - desc) : 0;
+  const G = isPart ? E : (A - desc) - (I * 0.94) - B - D;
+  const pctG = isPart ? pctE : (A - desc) ? G / (A - desc) : 0;
+  const H = (A * 0.94) - B - D;
+  const pctH = A ? H / A : 0;
+  return {A, B, D, E, pctE, F, pctF, G, pctG, H, pctH};
+}
+
+function render() {
+  buildPlanParams();
+  const tb = document.getElementById('results');
+  const isPart = planParams[currentPlan].nome === 'Particular';
+  const extraCols = isPart ? '' : `<th>% F</th><th>Méd. desc. + à vista (G)</th><th>% G</th>`;
+  tb.innerHTML = `<thead><tr>
+    <th>Lente</th>
+    <th>Valor (A)</th>
+    <th>Custo (B)</th>
+    <th>Imposto D</th>
+    <th>Méd. s/ desc. (E)</th>
+    <th>${isPart ? '% E' : 'Méd. c/ desc. (F)'}</th>
+    ${extraCols}
+    <th>À vista 6% (H)</th>
+    <th>% H</th>
+  </tr></thead><tbody id="tbody"></tbody>`;
+  const tbody = tb.querySelector('tbody');
+  let lastBrand = '';
+  lentes.forEach((l, i) => {
+    if (l.brand !== lastBrand) {
+      lastBrand = l.brand;
+      const br = document.createElement('tr');
+      br.className = 'brand-row';
+      br.innerHTML = `<td colspan="99"><i class="ti ti-building-hospital" style="font-size:11px;vertical-align:middle;margin-right:4px" aria-hidden="true"></i>${l.brand}</td>`;
+      tbody.appendChild(br);
+    }
+    const {A,B,D,E,pctE,F,pctF,G,pctG,H,pctH} = calc(i);
+    const tr = document.createElement('tr');
+    const extraTds = isPart ? '' : `
+      <td class="pct"><span class="badge ${badgeClass(pctF)}">${fmtPct(pctF)}</span></td>
+      <td class="money">${fmtBRL(G)}</td>
+      <td class="pct"><span class="badge ${badgeClass(pctG)}">${fmtPct(pctG)}</span></td>`;
+    tr.innerHTML = `
+      <td style="font-size:13px">${l.nome}</td>
+      <td class="money">${fmtBRL(A)}</td>
+      <td class="money">${fmtBRL(B)}</td>
+      <td class="money">${fmtBRL(D)}</td>
+      <td class="money">${fmtBRL(E)}</td>
+      <td class="${isPart ? 'pct' : 'money'}">${isPart
+        ? `<span class="badge ${badgeClass(pctE)}">${fmtPct(pctE)}</span>`
+        : fmtBRL(F)}</td>
+      ${extraTds}
+      <td class="money">${fmtBRL(H)}</td>
+      <td class="pct"><span class="badge ${badgeClass(pctH)}">${fmtPct(pctH)}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentPlan = parseInt(btn.dataset.plan);
+  buildPlanParams();
+  render();
+});
+
+buildCustoGrid();
+buildPlanParams();
+render();
+</script>
+</body>
+</html>
