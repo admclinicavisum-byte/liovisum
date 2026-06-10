@@ -8,245 +8,106 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     :root {
-      --bg: #f7f7f5;
-      --surface: #ffffff;
-      --surface2: #f2f1ee;
-      --border: rgba(0,0,0,0.10);
-      --border2: rgba(0,0,0,0.18);
-      --text: #1a1a18;
-      --text2: #6b6b67;
-      --text3: #a0a09c;
-      --blue-bg: #e6f1fb;
-      --blue-text: #185fa5;
-      --blue-border: #b5d4f4;
-      --green: #3b6d11;
-      --amber: #854f0b;
-      --red: #a32d2d;
-      --green-bg: #eaf3de;
-      --amber-bg: #faeeda;
-      --red-bg: #fcebeb;
-      --radius: 8px;
-      --radius-lg: 12px;
+      --bg:#f7f7f5; --surface:#ffffff; --surface2:#f2f1ee;
+      --border:rgba(0,0,0,0.09); --border2:rgba(0,0,0,0.16);
+      --text:#1a1a18; --text2:#6b6b67; --text3:#a0a09c;
+      --radius:8px; --radius-lg:12px;
+      --alto-bg:#ddeeff; --alto-border:#99ccee; --alto-text:#124880; --alto-card:#eef5fc;
+      --medio-bg:#fef3dc; --medio-border:#f5c96a; --medio-text:#7a4a00; --medio-card:#fffaf0;
+      --baixo-bg:#dff2e0; --baixo-border:#8ecf93; --baixo-text:#1f5c24; --baixo-card:#f0faf0;
+      --good-bg:#e4f4d8; --good-text:#2e6010;
+      --warn-bg:#faeeda; --warn-text:#854f0b;
+      --bad-bg:#fcebeb;  --bad-text:#a32d2d;
     }
-
-    @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme:dark) {
       :root {
-        --bg: #1c1c1a;
-        --surface: #242422;
-        --surface2: #2e2e2b;
-        --border: rgba(255,255,255,0.10);
-        --border2: rgba(255,255,255,0.18);
-        --text: #f0efe9;
-        --text2: #9b9b97;
-        --text3: #6b6b67;
-        --blue-bg: #0c447c;
-        --blue-text: #b5d4f4;
-        --blue-border: #185fa5;
-        --green: #c0dd97;
-        --amber: #fac775;
-        --red: #f7c1c1;
-        --green-bg: #173404;
-        --amber-bg: #412402;
-        --red-bg: #501313;
+        --bg:#1c1c1a; --surface:#242422; --surface2:#2e2e2b;
+        --border:rgba(255,255,255,0.09); --border2:rgba(255,255,255,0.16);
+        --text:#f0efe9; --text2:#9b9b97; --text3:#6b6b67;
+        --alto-bg:#0c3b6e; --alto-border:#1a5fa0; --alto-text:#b5d4f4; --alto-card:#0a2e55;
+        --medio-bg:#4a2e00; --medio-border:#a06a00; --medio-text:#f5c96a; --medio-card:#3a2300;
+        --baixo-bg:#0f3a12; --baixo-border:#2d7a33; --baixo-text:#8ecf93; --baixo-card:#0a2e0d;
+        --good-bg:#173404; --good-text:#c0dd97;
+        --warn-bg:#412402; --warn-text:#fac775;
+        --bad-bg:#501313; --bad-text:#f7c1c1;
       }
     }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); font-size:14px; line-height:1.5; min-height:100vh; }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.5;
-      min-height: 100vh;
-    }
+    .topbar { background:var(--surface); border-bottom:0.5px solid var(--border); padding:0 2rem; display:flex; align-items:center; gap:14px; height:56px; position:sticky; top:0; z-index:100; }
+    .topbar-icon { width:34px; height:34px; background:var(--alto-bg); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; }
+    .topbar-icon i { font-size:18px; color:var(--alto-text); }
+    .topbar-title { font-size:15px; font-weight:600; }
+    .topbar-sub { font-size:12px; color:var(--text2); }
+    .topbar-date { margin-left:auto; font-size:12px; color:var(--text3); }
 
-    /* HEADER */
-    .topbar {
-      background: var(--surface);
-      border-bottom: 0.5px solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      height: 56px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .topbar-icon {
-      width: 34px; height: 34px;
-      background: var(--blue-bg);
-      border-radius: var(--radius);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .topbar-icon i { font-size: 18px; color: var(--blue-text); }
-    .topbar-title { font-size: 15px; font-weight: 600; }
-    .topbar-sub { font-size: 12px; color: var(--text2); margin-left: 2px; }
-    .topbar-date { margin-left: auto; font-size: 12px; color: var(--text3); }
+    .container { max-width:1280px; margin:0 auto; padding:1.5rem; }
 
-    /* LAYOUT */
-    .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem; }
+    .panel { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem 1.5rem; margin-bottom:1rem; }
+    .panel-title { font-size:11px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
 
-    /* PANELS */
-    .panel {
-      background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .panel-title {
-      font-size: 11px; font-weight: 600; color: var(--text2);
-      text-transform: uppercase; letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .tabs { display:flex; gap:6px; flex-wrap:wrap; }
+    .tab { padding:6px 16px; border-radius:var(--radius); border:0.5px solid var(--border2); background:transparent; color:var(--text2); font-size:13px; font-family:inherit; cursor:pointer; transition:all 0.15s; }
+    .tab:hover { background:var(--surface2); color:var(--text); }
+    .tab.active { background:var(--alto-bg); color:var(--alto-text); border-color:var(--alto-border); font-weight:500; }
 
-    /* TABS */
-    .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tab {
-      padding: 6px 16px;
-      border-radius: var(--radius);
-      border: 0.5px solid var(--border2);
-      background: transparent;
-      color: var(--text2);
-      font-size: 13px;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .tab:hover { background: var(--surface2); color: var(--text); }
-    .tab.active {
-      background: var(--blue-bg);
-      color: var(--blue-text);
-      border-color: var(--blue-border);
-      font-weight: 500;
-    }
+    .faixa { border-radius:var(--radius-lg); border:1px solid; padding:1rem 1.25rem; margin-bottom:1rem; }
+    .faixa.alto  { background:var(--alto-card);  border-color:var(--alto-border); }
+    .faixa.medio { background:var(--medio-card); border-color:var(--medio-border); }
+    .faixa.baixo { background:var(--baixo-card); border-color:var(--baixo-border); }
 
-    /* CUSTO GRID */
-    .custo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 8px;
-    }
-    .custo-card {
-      background: var(--surface2);
-      border-radius: var(--radius);
-      padding: 10px 12px;
-    }
-    .custo-card label {
-      display: block;
-      font-size: 11px;
-      color: var(--text2);
-      margin-bottom: 5px;
-      line-height: 1.3;
-    }
-    .custo-card .brand-hint { color: var(--text3); font-size: 10px; }
-    .custo-card input {
-      width: 100%;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
-      padding: 5px 9px;
-      border-radius: var(--radius);
-      border: 0.5px solid var(--border2);
-      background: var(--surface);
-      color: var(--text);
-      transition: box-shadow 0.15s;
-    }
-    .custo-card input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px var(--blue-border);
-    }
+    .faixa-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:10px; }
+    .faixa-label { font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; }
+    .alto  .faixa-label { color:var(--alto-text); }
+    .medio .faixa-label { color:var(--medio-text); }
+    .baixo .faixa-label { color:var(--baixo-text); }
 
-    /* PLAN PARAMS */
-    .plan-params-grid {
-      display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
-    }
-    .pp-group { display: flex; flex-direction: column; gap: 5px; }
-    .pp-group label { font-size: 11px; color: var(--text2); }
-    .pp-group input {
-      font-size: 13px;
-      font-family: inherit;
-      padding: 6px 10px;
-      border-radius: var(--radius);
-      border: 0.5px solid var(--border2);
-      background: var(--surface);
-      color: var(--text);
-      width: 130px;
-    }
-    .pp-group input:focus { outline: none; box-shadow: 0 0 0 2px var(--blue-border); }
+    .faixa-preco-wrap { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .preco-hint { font-size:11px; color:var(--text2); }
+    .preco-input-wrap { display:flex; align-items:center; gap:6px; }
+    .preco-input-wrap span { font-size:12px; color:var(--text2); }
+    .preco-input { font-size:14px; font-weight:600; font-family:inherit; padding:4px 10px; border-radius:var(--radius); border:1px solid; width:130px; background:var(--surface); }
+    .alto  .preco-input { color:var(--alto-text); border-color:var(--alto-border); }
+    .medio .preco-input { color:var(--medio-text); border-color:var(--medio-border); }
+    .baixo .preco-input { color:var(--baixo-text); border-color:var(--baixo-border); }
+    .preco-input:focus { outline:none; box-shadow:0 0 0 2px var(--alto-border); }
 
-    /* RESULTS TABLE */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th {
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text2);
-      padding: 8px 10px;
-      border-bottom: 0.5px solid var(--border);
-      white-space: nowrap;
-      background: var(--surface);
-      position: sticky; top: 56px;
-    }
-    tbody td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
-    tbody tr:hover td { background: var(--surface2); }
-    .brand-row td {
-      background: var(--surface2);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text2);
-      padding: 5px 10px;
-      letter-spacing: 0.03em;
-    }
-    .money { font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .pct { font-size: 12px; font-weight: 500; white-space: nowrap; }
-    .badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 99px;
-    }
-    .badge-good { background: var(--green-bg); color: var(--green); }
-    .badge-warn { background: var(--amber-bg); color: var(--amber); }
-    .badge-bad  { background: var(--red-bg);   color: var(--red); }
+    .custo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px; }
+    .custo-card { background:var(--surface); border-radius:var(--radius); padding:10px 12px; border:0.5px solid var(--border2); }
+    .custo-card label { display:block; font-size:11px; color:var(--text2); margin-bottom:5px; line-height:1.3; }
+    .custo-card .brand-hint { color:var(--text3); font-size:10px; }
+    .custo-card input { width:100%; font-size:14px; font-weight:500; font-family:inherit; padding:5px 9px; border-radius:var(--radius); border:0.5px solid var(--border2); background:var(--bg); color:var(--text); transition:box-shadow 0.15s; }
+    .custo-card input:focus { outline:none; box-shadow:0 0 0 2px var(--alto-border); }
 
-    /* FORMULA BAR */
-    .formula-bar {
-      font-size: 11px;
-      color: var(--text3);
-      padding: 0.75rem 1.5rem;
-      border-top: 0.5px solid var(--border);
-      display: flex; gap: 16px; flex-wrap: wrap;
-    }
-    .formula-bar span::before { content: '·  '; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    thead th { text-align:left; font-size:11px; font-weight:600; color:var(--text2); padding:8px 10px; border-bottom:0.5px solid var(--border); white-space:nowrap; background:var(--surface); position:sticky; top:56px; }
+    tbody td { padding:7px 10px; border-bottom:0.5px solid var(--border); vertical-align:middle; }
+    tbody tr:hover td { background:var(--surface2); }
+    .cat-row td { font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:6px 10px; }
+    .cat-row.alto  td { background:var(--alto-bg);  color:var(--alto-text); }
+    .cat-row.medio td { background:var(--medio-bg); color:var(--medio-text); }
+    .cat-row.baixo td { background:var(--baixo-bg); color:var(--baixo-text); }
+    .brand-sub td { background:var(--surface2); font-size:11px; color:var(--text2); padding:4px 10px 4px 20px; }
 
-    /* TOP ROW */
-    .top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
-    .recalc-btn {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 14px;
-      border-radius: var(--radius);
-      border: 0.5px solid var(--border2);
-      background: transparent;
-      color: var(--text);
-      font-size: 13px;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .recalc-btn:hover { background: var(--surface2); }
+    .money { font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .badge { display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:99px; min-width:48px; text-align:center; }
+    .badge-good { background:var(--good-bg); color:var(--good-text); }
+    .badge-warn { background:var(--warn-bg); color:var(--warn-text); }
+    .badge-bad  { background:var(--bad-bg);  color:var(--bad-text); }
 
-    @media (max-width: 640px) {
-      .topbar { padding: 0 1rem; }
-      .container { padding: 1rem; }
-      .custo-grid { grid-template-columns: 1fr 1fr; }
+    .recalc-btn { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:var(--radius); border:0.5px solid var(--border2); background:transparent; color:var(--text); font-size:13px; font-family:inherit; cursor:pointer; transition:background 0.15s; }
+    .recalc-btn:hover { background:var(--surface2); }
+
+    .formula-bar { font-size:11px; color:var(--text3); padding:0.75rem 1.5rem; border-top:0.5px solid var(--border); display:flex; gap:14px; flex-wrap:wrap; }
+    .formula-bar b { color:var(--text2); }
+
+    @media(max-width:640px){
+      .topbar{padding:0 1rem;}
+      .container{padding:1rem;}
+      .custo-grid{grid-template-columns:1fr 1fr;}
     }
   </style>
 </head>
@@ -263,206 +124,254 @@
 
 <main class="container">
 
-  <!-- PLANO -->
   <div class="panel">
-    <div class="panel-title"><i class="ti ti-building-hospital" aria-hidden="true"></i> Plano de saúde</div>
+    <div class="panel-title"><i class="ti ti-building-hospital" aria-hidden="true"></i> Convênio / Forma de pagamento</div>
     <div class="tabs" id="tabs">
-      <button class="tab active" data-plan="0">GEAP</button>
-      <button class="tab" data-plan="1">CELOS</button>
-      <button class="tab" data-plan="2">Postal Saúde</button>
-      <button class="tab" data-plan="3">Unimed</button>
-      <button class="tab" data-plan="4">Particular</button>
+      <button class="tab active" data-plan="0">Particular</button>
+      <button class="tab" data-plan="1">GEAP</button>
+      <button class="tab" data-plan="2">Unimed</button>
+      <button class="tab" data-plan="3">Postal Saúde</button>
+      <button class="tab" data-plan="4">CELOS</button>
     </div>
   </div>
 
-  <!-- CUSTOS -->
-  <div class="panel">
-    <div class="panel-title"><i class="ti ti-tag" aria-hidden="true"></i> Custo atual das lentes (B) — edite os valores para atualizar</div>
-    <div class="custo-grid" id="custo-grid"></div>
-  </div>
+  <div id="faixas-container"></div>
 
-  <!-- PARAMS DO PLANO -->
-  <div class="panel">
-    <div class="panel-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Parâmetros do plano</div>
-    <div class="plan-params-grid" id="plan-params"></div>
-  </div>
-
-  <!-- RESULTADO -->
-  <div class="panel" style="padding: 0; overflow:hidden;">
-    <div style="padding: 1rem 1.5rem 0.75rem; display:flex; align-items:center; justify-content:space-between;">
-      <div class="panel-title" style="margin:0"><i class="ti ti-table" aria-hidden="true"></i> Resultado calculado</div>
+  <div class="panel" style="padding:0;overflow:hidden;">
+    <div style="padding:1rem 1.5rem 0.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div class="panel-title" style="margin:0">
+        <i class="ti ti-table" aria-hidden="true"></i>
+        Percentuais do médico — <span id="plano-label" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;"></span>
+      </div>
       <button class="recalc-btn" onclick="render()"><i class="ti ti-refresh" aria-hidden="true"></i> Recalcular</button>
     </div>
-    <div class="table-wrap">
-      <table id="results"></table>
-    </div>
-    <div class="formula-bar">
-      <span>D = 20% sobre A</span>
-      <span>E = A − B − D</span>
-      <span>F = (A − desconto) − B − D</span>
-      <span>G = (A − desconto) − (I × 0,94) − B − D</span>
-      <span>H = (A × 0,94) − B − D</span>
-    </div>
+    <div class="table-wrap"><table id="results"></table></div>
+    <div class="formula-bar" id="formula-bar"></div>
   </div>
 
 </main>
 
 <script>
-const fmtBRL = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
-const fmtPct = v => (v * 100).toFixed(1) + '%';
-const badgeClass = v => v >= 0.55 ? 'badge-good' : v >= 0.35 ? 'badge-warn' : 'badge-bad';
+const fmtBRL = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const fmtPct = v => Math.round(v * 100) + '%';
+const bc = v => v >= 0.55 ? 'badge-good' : v >= 0.35 ? 'badge-warn' : 'badge-bad';
 
-const lentes = [
-  {brand:'Johnson & Johnson', nome:'Tecnis One Asférica',         custo:411.83,  cat:'baixo'},
-  {brand:'Johnson & Johnson', nome:'Tecnis One Tórica',           custo:942,     cat:'medio'},
-  {brand:'Johnson & Johnson', nome:'Eyhance Simplicity',          custo:1186.72, cat:'medio'},
-  {brand:'Johnson & Johnson', nome:'Eyhance Tórica Simplicity',   custo:1674.39, cat:'medio'},
-  {brand:'Johnson & Johnson', nome:'Tecnis Puresse EdOF',         custo:3555,    cat:'alto'},
-  {brand:'Johnson & Johnson', nome:'Odyssey Trifocal',            custo:3737.5,  cat:'alto'},
-  {brand:'Alcon',             nome:'Panoptix / Vivity',           custo:3700,    cat:'alto'},
-  {brand:'Alcon',             nome:'Panoptix / Vivity Tórica',    custo:5100,    cat:'alto'},
-  {brand:'Alcon',             nome:'SN60WF',                      custo:550,     cat:'baixo'},
-  {brand:'Zeiss',             nome:'CT Asphina',                  custo:409.5,   cat:'baixo'},
-  {brand:'Zeiss',             nome:'AT Lara 829MP',               custo:2181,    cat:'alto'},
-  {brand:'Zeiss',             nome:'AT Lara Toric 929MP',         custo:2396.8,  cat:'alto'},
-  {brand:'Zeiss',             nome:'AT Lara Toric 929MP cil +4.5',custo:3602,    cat:'alto'},
-  {brand:'Zeiss',             nome:'AT Lisa TRI 839MP',           custo:2926.5,  cat:'alto'},
-  {brand:'Zeiss',             nome:'AT Lisa TRI Toric 939MP',     custo:3404.8,  cat:'alto'},
-  {brand:'Zeiss',             nome:'AT Lisa TRI Toric cil +4.5',  custo:5961,    cat:'alto'},
-  {brand:'Zeiss',             nome:'CT Lucia',                    custo:411.6,   cat:'medio'},
-  {brand:'Zeiss',             nome:'AT Torbi Tórica',             custo:1237,    cat:'medio'},
-  {brand:'Zeiss',             nome:'AT Torbi cilindro +4,5',      custo:1237,    cat:'medio'},
-  {brand:'Zeiss',             nome:'AT Elana Multifocal Tri',     custo:3328,    cat:'alto'},
-  {brand:'Rayner',            nome:'Rayone EMV',                  custo:895,     cat:'medio'},
-  {brand:'Rayner',            nome:'Rayone EMV Tórica',           custo:1800,    cat:'medio'},
-  {brand:'Rayner',            nome:'Rayone Galaxy',               custo:5700,    cat:'alto'},
-  {brand:'BVI',               nome:'Micropure',                   custo:420,     cat:'baixo'},
-];
+let precos = { alto:10800, medio:5800, baixo:4200 };
 
 const planos = [
-  {nome:'GEAP',         desconto:250,     valorBaixo:3950,   valorMedio:5550,   valorAlto:10550},
-  {nome:'CELOS',        desconto:2115.67, valorBaixo:2084.33,valorMedio:3684.33,valorAlto:8684.33},
-  {nome:'Postal Saúde', desconto:900,     valorBaixo:3300,   valorMedio:4900,   valorAlto:9900},
-  {nome:'Unimed',       desconto:300,     valorBaixo:3900,   valorMedio:5500,   valorAlto:10500},
-  {nome:'Particular',   desconto:0,       valorBaixo:4200,   valorMedio:5800,   valorAlto:10800},
+  { nome:'Particular',   subsidio:0       },
+  { nome:'GEAP',         subsidio:250     },
+  { nome:'Unimed',       subsidio:300     },
+  { nome:'Postal Saúde', subsidio:900     },
+  { nome:'CELOS',        subsidio:2115.67 },
+];
+
+const lentes = [
+  {brand:'Johnson & Johnson', nome:'Tecnis Puresse EdOF',          custo:3555,    cat:'alto'},
+  {brand:'Johnson & Johnson', nome:'Odyssey Trifocal',             custo:3737.5,  cat:'alto'},
+  {brand:'Alcon',             nome:'Panoptix / Vivity',            custo:3700,    cat:'alto'},
+  {brand:'Alcon',             nome:'Panoptix / Vivity Tórica',     custo:5100,    cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lara 829MP',                custo:2181,    cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lara Toric 929MP',          custo:2396.8,  cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lara Toric 929MP cil +4.5', custo:3602,    cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lisa TRI 839MP',            custo:2926.5,  cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lisa TRI Toric 939MP',      custo:3404.8,  cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Lisa TRI Toric cil +4.5',   custo:5961,    cat:'alto'},
+  {brand:'Zeiss',             nome:'AT Elana Multifocal Tri',      custo:3328,    cat:'alto'},
+  {brand:'Rayner',            nome:'Rayone Galaxy',                custo:5700,    cat:'alto'},
+  {brand:'Johnson & Johnson', nome:'Tecnis One Tórica',            custo:942,     cat:'medio'},
+  {brand:'Johnson & Johnson', nome:'Eyhance Simplicity',           custo:1186.72, cat:'medio'},
+  {brand:'Johnson & Johnson', nome:'Eyhance Tórica Simplicity',    custo:1674.39, cat:'medio'},
+  {brand:'Zeiss',             nome:'CT Lucia',                     custo:411.6,   cat:'medio'},
+  {brand:'Zeiss',             nome:'AT Torbi Tórica',              custo:1237,    cat:'medio'},
+  {brand:'Zeiss',             nome:'AT Torbi cilindro +4,5',       custo:1237,    cat:'medio'},
+  {brand:'Rayner',            nome:'Rayone EMV',                   custo:895,     cat:'medio'},
+  {brand:'Rayner',            nome:'Rayone EMV Tórica',            custo:1800,    cat:'medio'},
+  {brand:'Johnson & Johnson', nome:'Tecnis One Asférica',          custo:411.83,  cat:'baixo'},
+  {brand:'Alcon',             nome:'SN60WF',                       custo:550,     cat:'baixo'},
+  {brand:'Zeiss',             nome:'CT Asphina',                   custo:409.5,   cat:'baixo'},
+  {brand:'BVI',               nome:'Micropure',                    custo:420,     cat:'baixo'},
 ];
 
 let custos = lentes.map(l => l.custo);
 let currentPlan = 0;
-let planParams = planos.map(p => ({...p}));
 
 document.getElementById('hoje').textContent = 'Atualizado em ' + new Date().toLocaleDateString('pt-BR');
 
-function updateParam(planIdx, key, val) {
-  planParams[planIdx][key] = parseFloat(val) || 0;
-  render();
-}
+const faixasMeta = [
+  { cat:'alto',  label:'Faixa Premium',       emoji:'🔵', key:'alto'  },
+  { cat:'medio', label:'Faixa Intermediária',  emoji:'🟡', key:'medio' },
+  { cat:'baixo', label:'Faixa Básica',         emoji:'🟢', key:'baixo' },
+];
 
-function buildCustoGrid() {
-  const grid = document.getElementById('custo-grid');
-  grid.innerHTML = '';
-  lentes.forEach((l, i) => {
-    const d = document.createElement('div');
-    d.className = 'custo-card';
-    d.innerHTML = `<label>${l.nome}<br><span class="brand-hint">${l.brand}</span></label>
-      <input type="number" step="0.01" value="${custos[i].toFixed(2)}" data-idx="${i}"
-        onchange="updateCusto(${i}, this.value)">`;
-    grid.appendChild(d);
+function buildFaixas() {
+  const container = document.getElementById('faixas-container');
+  container.innerHTML = '';
+  faixasMeta.forEach(fm => {
+    const div = document.createElement('div');
+    div.className = `faixa ${fm.cat}`;
+    div.innerHTML = `
+      <div class="faixa-header">
+        <span class="faixa-label">${fm.emoji} ${fm.label}</span>
+        <div class="faixa-preco-wrap">
+          <span class="preco-hint">Preço final de venda:</span>
+          <div class="preco-input-wrap">
+            <span>R$</span>
+            <input class="preco-input" type="number" step="0.01"
+              value="${precos[fm.key].toFixed(2)}"
+              onchange="updatePreco('${fm.key}', this.value)">
+          </div>
+        </div>
+      </div>
+      <div class="custo-grid" id="grid-${fm.cat}"></div>`;
+    container.appendChild(div);
+    const grid = div.querySelector(`#grid-${fm.cat}`);
+    lentes.forEach((l, i) => {
+      if (l.cat !== fm.cat) return;
+      const card = document.createElement('div');
+      card.className = 'custo-card';
+      card.innerHTML = `<label>${l.nome}<br><span class="brand-hint">${l.brand}</span></label>
+        <input type="number" step="0.01" value="${custos[i].toFixed(2)}" onchange="updateCusto(${i},this.value)">`;
+      grid.appendChild(card);
+    });
   });
 }
 
-function updateCusto(idx, val) {
-  custos[idx] = parseFloat(val) || 0;
-  render();
-}
+function updatePreco(key, val) { precos[key] = parseFloat(val) || 0; render(); }
+function updateCusto(i, val)   { custos[i]  = parseFloat(val) || 0; render(); }
 
-function buildPlanParams() {
-  const pp = document.getElementById('plan-params');
-  const p = planParams[currentPlan];
-  const isPart = p.nome === 'Particular';
-  const field = (label, key) => `
-    <div class="pp-group">
-      <label>${label}</label>
-      <input type="number" step="0.01" value="${p[key].toFixed(2)}"
-        onchange="updateParam(${currentPlan}, '${key}', this.value)">
-    </div>`;
-  pp.innerHTML = (isPart ? '' : field('Desconto do plano (R$)', 'desconto'))
-    + field('Valor repasse baixo — 4.200 (I)', 'valorBaixo')
-    + field('Valor repasse médio — 5.800 (I)', 'valorMedio')
-    + field('Valor repasse alto — 10.800 (I)', 'valorAlto');
-}
+// ── FÓRMULAS ─────────────────────────────────────────────────────
+// 1. Particular sem desconto:
+//    Base = A  |  D = Base × 0,20
+//    Margem = Base − B − D  |  % = Margem / Base
 
-function valA(l) {
-  const p = planParams[currentPlan];
-  return l.cat === 'baixo' ? p.valorBaixo : l.cat === 'medio' ? p.valorMedio : p.valorAlto;
-}
+// 2. Particular à vista (−6%):
+//    Base = A × 0,94  |  D = Base × 0,20
+//    Margem = Base − B − D  |  % = Margem / Base
 
-function valI(l) { return valA(l); }
+// 3. Convênio com subsídio:
+//    Base = A − sub  |  D = Base × 0,20
+//    Margem = Base − B − D  |  % = Margem / Base
 
-function calc(i) {
+// 4. Convênio subsídio + à vista:
+//    Base = (A − sub) × 0,94  |  D = Base × 0,20
+//    Margem = Base − B − D  |  % = Margem / Base
+
+function calcLente(i) {
   const l = lentes[i];
-  const p = planParams[currentPlan];
-  const isPart = p.nome === 'Particular';
-  const A = valA(l);
-  const B = custos[i];
-  const D = A * 0.20;
-  const I = valI(l);
-  const desc = isPart ? 0 : p.desconto;
-  const E = A - B - D;
-  const pctE = A ? E / A : 0;
-  const F = isPart ? E : (A - desc) - B - D;
-  const pctF = isPart ? pctE : (A - desc) ? F / (A - desc) : 0;
-  const G = isPart ? E : (A - desc) - (I * 0.94) - B - D;
-  const pctG = isPart ? pctE : (A - desc) ? G / (A - desc) : 0;
-  const H = (A * 0.94) - B - D;
-  const pctH = A ? H / A : 0;
-  return {A, B, D, E, pctE, F, pctF, G, pctG, H, pctH};
+  const A   = precos[l.cat];
+  const B   = custos[i];
+  const sub = planos[currentPlan].subsidio;
+
+  function calc(base) {
+    const D = base * 0.20;
+    const m = base - B - D;
+    const p = base ? m / base : 0;
+    return { base, D, m, p };
+  }
+
+  const sd    = calc(A);                    // sem desconto
+  const av    = calc(A * 0.94);             // à vista
+  const csub  = calc(A - sub);              // c/ subsídio
+  const subav = calc((A - sub) * 0.94);     // subsídio + à vista
+
+  return { A, B, sub, sd, av, csub, subav };
 }
 
+// ── RENDER ───────────────────────────────────────────────────────
 function render() {
-  buildPlanParams();
+  const p = planos[currentPlan];
+  const isPart = p.subsidio === 0;
+
+  document.getElementById('plano-label').textContent =
+    p.nome + (isPart ? '' : ` · subsídio ${fmtBRL(p.subsidio)}`);
+
+  const fb = document.getElementById('formula-bar');
+  if (isPart) {
+    fb.innerHTML = `
+      <span><b>Sem desconto:</b> Base=A · D=Base×20% · %=(Base−B−D)/Base</span>
+      <span><b>À vista −6%:</b> Base=A×0,94 · D=Base×20% · %=(Base−B−D)/Base</span>`;
+  } else {
+    fb.innerHTML = `
+      <span><b>C/ subsídio:</b> Base=A−sub · D=Base×20% · %=(Base−B−D)/Base</span>
+      <span><b>Sub + à vista:</b> Base=(A−sub)×0,94 · D=Base×20% · %=(Base−B−D)/Base</span>
+      <span><b>sub</b> = ${fmtBRL(p.subsidio)}</span>`;
+  }
+
   const tb = document.getElementById('results');
-  const isPart = planParams[currentPlan].nome === 'Particular';
-  const extraCols = isPart ? '' : `<th>% F</th><th>Méd. desc. + à vista (G)</th><th>% G</th>`;
-  tb.innerHTML = `<thead><tr>
-    <th>Lente</th>
-    <th>Valor (A)</th>
-    <th>Custo (B)</th>
-    <th>Imposto D</th>
-    <th>Méd. s/ desc. (E)</th>
-    <th>${isPart ? '% E' : 'Méd. c/ desc. (F)'}</th>
-    ${extraCols}
-    <th>À vista 6% (H)</th>
-    <th>% H</th>
-  </tr></thead><tbody id="tbody"></tbody>`;
+
+  if (isPart) {
+    tb.innerHTML = `<thead><tr>
+      <th>Lente</th>
+      <th>Venda (A)</th>
+      <th>Custo (B)</th>
+      <th>NF s/ desc.</th>
+      <th>Margem s/ desconto</th>
+      <th>% Médico s/ desc.</th>
+      <th>NF à vista</th>
+      <th>Margem à vista</th>
+      <th>% Médico à vista</th>
+    </tr></thead><tbody id="tbody"></tbody>`;
+  } else {
+    tb.innerHTML = `<thead><tr>
+      <th>Lente</th>
+      <th>Venda (A)</th>
+      <th>Custo (B)</th>
+      <th>NF c/ subsídio</th>
+      <th>Margem c/ subsídio</th>
+      <th>% Médico c/ subsídio</th>
+      <th>NF sub + à vista</th>
+      <th>Margem sub + à vista</th>
+      <th>% Médico sub + à vista</th>
+    </tr></thead><tbody id="tbody"></tbody>`;
+  }
+
   const tbody = tb.querySelector('tbody');
-  let lastBrand = '';
+  let lastCat = '', lastBrand = '';
+
   lentes.forEach((l, i) => {
+    if (l.cat !== lastCat) {
+      lastCat = l.cat; lastBrand = '';
+      const fm = faixasMeta.find(f => f.cat === l.cat);
+      const tr = document.createElement('tr');
+      tr.className = `cat-row ${l.cat}`;
+      tr.innerHTML = `<td colspan="99">${fm.emoji} ${fm.label} — Preço final: ${fmtBRL(precos[l.cat])}</td>`;
+      tbody.appendChild(tr);
+    }
     if (l.brand !== lastBrand) {
       lastBrand = l.brand;
-      const br = document.createElement('tr');
-      br.className = 'brand-row';
-      br.innerHTML = `<td colspan="99"><i class="ti ti-building-hospital" style="font-size:11px;vertical-align:middle;margin-right:4px" aria-hidden="true"></i>${l.brand}</td>`;
-      tbody.appendChild(br);
+      const tr = document.createElement('tr');
+      tr.className = 'brand-sub';
+      tr.innerHTML = `<td colspan="99"><i class="ti ti-circle-filled" style="font-size:6px;vertical-align:middle;margin-right:6px"></i>${l.brand}</td>`;
+      tbody.appendChild(tr);
     }
-    const {A,B,D,E,pctE,F,pctF,G,pctG,H,pctH} = calc(i);
+
+    const r = calcLente(i);
     const tr = document.createElement('tr');
-    const extraTds = isPart ? '' : `
-      <td class="pct"><span class="badge ${badgeClass(pctF)}">${fmtPct(pctF)}</span></td>
-      <td class="money">${fmtBRL(G)}</td>
-      <td class="pct"><span class="badge ${badgeClass(pctG)}">${fmtPct(pctG)}</span></td>`;
-    tr.innerHTML = `
-      <td style="font-size:13px">${l.nome}</td>
-      <td class="money">${fmtBRL(A)}</td>
-      <td class="money">${fmtBRL(B)}</td>
-      <td class="money">${fmtBRL(D)}</td>
-      <td class="money">${fmtBRL(E)}</td>
-      <td class="${isPart ? 'pct' : 'money'}">${isPart
-        ? `<span class="badge ${badgeClass(pctE)}">${fmtPct(pctE)}</span>`
-        : fmtBRL(F)}</td>
-      ${extraTds}
-      <td class="money">${fmtBRL(H)}</td>
-      <td class="pct"><span class="badge ${badgeClass(pctH)}">${fmtPct(pctH)}</span></td>`;
+
+    if (isPart) {
+      tr.innerHTML = `
+        <td>${l.nome}</td>
+        <td class="money">${fmtBRL(r.A)}</td>
+        <td class="money">${fmtBRL(r.B)}</td>
+        <td class="money">${fmtBRL(r.sd.D)}</td>
+        <td class="money">${fmtBRL(r.sd.m)}</td>
+        <td><span class="badge ${bc(r.sd.p)}">${fmtPct(r.sd.p)}</span></td>
+        <td class="money">${fmtBRL(r.av.D)}</td>
+        <td class="money">${fmtBRL(r.av.m)}</td>
+        <td><span class="badge ${bc(r.av.p)}">${fmtPct(r.av.p)}</span></td>`;
+    } else {
+      tr.innerHTML = `
+        <td>${l.nome}</td>
+        <td class="money">${fmtBRL(r.A)}</td>
+        <td class="money">${fmtBRL(r.B)}</td>
+        <td class="money">${fmtBRL(r.csub.D)}</td>
+        <td class="money">${fmtBRL(r.csub.m)}</td>
+        <td><span class="badge ${bc(r.csub.p)}">${fmtPct(r.csub.p)}</span></td>
+        <td class="money">${fmtBRL(r.subav.D)}</td>
+        <td class="money">${fmtBRL(r.subav.m)}</td>
+        <td><span class="badge ${bc(r.subav.p)}">${fmtPct(r.subav.p)}</span></td>`;
+    }
     tbody.appendChild(tr);
   });
 }
@@ -473,12 +382,10 @@ document.getElementById('tabs').addEventListener('click', e => {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
   currentPlan = parseInt(btn.dataset.plan);
-  buildPlanParams();
   render();
 });
 
-buildCustoGrid();
-buildPlanParams();
+buildFaixas();
 render();
 </script>
 </body>
