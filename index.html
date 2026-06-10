@@ -119,7 +119,11 @@
     <div class="topbar-title">Portal LIOs — Clínica Visum</div>
     <div class="topbar-sub">Precificação de Lentes Intraoculares</div>
   </div>
-  <div class="topbar-date" id="hoje"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+    <span id="saved-indicator" style="font-size:11px;color:#8ecf93;display:none;">● Valores salvos</span>
+    <button onclick="resetState()" style="font-size:11px;padding:4px 10px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.16);background:transparent;cursor:pointer;color:#6b6b67;font-family:inherit;" title="Restaurar valores originais">↺ Restaurar padrão</button>
+    <div class="topbar-date" id="hoje"></div>
+  </div>
 </header>
 
 <main class="container">
@@ -185,7 +189,6 @@ const lentes = [
   {brand:'Zeiss',             nome:'CT Lucia',                     custo:411.6,   cat:'medio'},
   {brand:'Zeiss',             nome:'AT Lara 829MP',                custo:2181,    cat:'medio'},
   {brand:'Zeiss',             nome:'AT Lara Toric 929MP',          custo:2396.8,  cat:'medio'},
-  {brand:'Zeiss',             nome:'AT Lara Toric 929MP cil +4.5', custo:3602,    cat:'medio'},
   {brand:'Zeiss',             nome:'AT Torbi Tórica',              custo:1237,    cat:'medio'},
   // FAIXA BÁSICA — R$ 4.200
   {brand:'Johnson & Johnson', nome:'Tecnis One Asférica',          custo:411.83,  cat:'baixo'},
@@ -194,8 +197,44 @@ const lentes = [
   {brand:'BVI',               nome:'Micropure',                    custo:420,     cat:'baixo'},
 ];
 
+// ── PERSISTÊNCIA localStorage ────────────────────────────────────
+const STORAGE_KEY = 'liovisum_v2';
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ custos, precos }));
+    const ind = document.getElementById('saved-indicator');
+    if (ind) { ind.style.display='inline'; clearTimeout(ind._t); ind._t = setTimeout(()=>ind.style.display='none', 2000); }
+  } catch(e) {}
+}
+
+function resetState() {
+  if (!confirm('Restaurar todos os valores para o padrão original?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  custos = lentes.map(l => l.custo);
+  precos = { alto:10800, medio:5800, baixo:4200 };
+  buildFaixas();
+  render();
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved) {
+      if (Array.isArray(saved.custos) && saved.custos.length === lentes.length) {
+        custos = saved.custos;
+      }
+      if (saved.precos && typeof saved.precos === 'object') {
+        precos = { ...precos, ...saved.precos };
+      }
+    }
+  } catch(e) {}
+}
+
 let custos = lentes.map(l => l.custo);
 let currentPlan = 0;
+
+loadState();
 
 document.getElementById('hoje').textContent = 'Atualizado em ' + new Date().toLocaleDateString('pt-BR');
 
@@ -238,8 +277,8 @@ function buildFaixas() {
   });
 }
 
-function updatePreco(key, val) { precos[key] = parseFloat(val) || 0; render(); }
-function updateCusto(i, val)   { custos[i]  = parseFloat(val) || 0; render(); }
+function updatePreco(key, val) { precos[key] = parseFloat(val) || 0; saveState(); render(); }
+function updateCusto(i, val)   { custos[i]  = parseFloat(val) || 0; saveState(); render(); }
 
 // ── FÓRMULAS ─────────────────────────────────────────────────────
 // 1. Particular sem desconto:
