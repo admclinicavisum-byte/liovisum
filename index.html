@@ -119,11 +119,7 @@
     <div class="topbar-title">Portal LIOs — Clínica Visum</div>
     <div class="topbar-sub">Precificação de Lentes Intraoculares</div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
-    <span id="saved-indicator" style="font-size:11px;color:#8ecf93;display:none;">● Valores salvos</span>
-    <button onclick="resetState()" style="font-size:11px;padding:4px 10px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.16);background:transparent;cursor:pointer;color:#6b6b67;font-family:inherit;" title="Restaurar valores originais">↺ Restaurar padrão</button>
-    <div class="topbar-date" id="hoje"></div>
-  </div>
+  <div class="topbar-date" id="hoje"></div>
 </header>
 
 <main class="container">
@@ -192,80 +188,23 @@ const lentes = [
   {brand:'BVI',               nome:'Micropure',                    custo:420,     cat:'medio'},
 ];
 
-// ── PERSISTÊNCIA GitHub Gist ─────────────────────────────────────
-const GH_TOKEN  = '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';
-const GIST_ID   = '8265f3271902838fb9426c23fe18b78b';
-const GIST_FILE = 'dados.json';
-const GIST_API  = `https://api.github.com/gists/${GIST_ID}`;
-
-function showIndicator(msg, color) {
-  const ind = document.getElementById('saved-indicator');
-  if (!ind) return;
-  ind.textContent = msg;
-  ind.style.color = color || '#8ecf93';
-  ind.style.display = 'inline';
-  clearTimeout(ind._t);
-  ind._t = setTimeout(() => ind.style.display = 'none', 3000);
-}
-
-async function saveState() {
-  showIndicator('⟳ Salvando...', '#a0a09c');
-  try {
-    const data = { custos, precos };
-    const res = await fetch(GIST_API, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `token ${GH_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        files: { [GIST_FILE]: { content: JSON.stringify(data, null, 2) } }
-      })
-    });
-    if (res.ok) {
-      showIndicator('● Valores salvos', '#8ecf93');
-    } else {
-      const err = await res.json();
-      console.error('Gist save error:', err);
-      showIndicator('⚠ Erro ao salvar', '#f5a623');
-    }
-  } catch(e) {
-    console.error('saveState error:', e);
-    showIndicator('⚠ Erro ao salvar', '#f5a623');
-  }
-}
-
+// ── CARREGAR DADOS DO dados.json ─────────────────────────────────
 async function loadState() {
-  showIndicator('⟳ Carregando...', '#a0a09c');
   try {
-    const res = await fetch(GIST_API, {
-      headers: {
-        'Authorization': `token ${GH_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
-    if (!res.ok) { showIndicator('', ''); return; }
-    const json = await res.json();
-    const raw = json.files[GIST_FILE]?.content;
-    if (!raw) { showIndicator('', ''); return; }
-    const saved = JSON.parse(raw);
+    const res = await fetch('./dados.json?t=' + Date.now());
+    if (!res.ok) return;
+    const saved = await res.json();
     if (saved) {
       if (Array.isArray(saved.custos) && saved.custos.length === lentes.length) custos = saved.custos;
       if (saved.precos && typeof saved.precos === 'object') precos = { ...precos, ...saved.precos };
     }
-    showIndicator('● Dados carregados', '#8ecf93');
-  } catch(e) {
-    console.error('loadState error:', e);
-    showIndicator('', '');
-  }
+  } catch(e) {}
 }
 
-async function resetState() {
+function resetState() {
   if (!confirm('Restaurar todos os valores para o padrão original?')) return;
   custos = lentes.map(l => l.custo);
   precos = { alto:10800, medio:5800, baixo:4200 };
-  await saveState();
   buildFaixas();
   render();
 }
@@ -314,8 +253,8 @@ function buildFaixas() {
   });
 }
 
-function updatePreco(key, val) { precos[key] = parseFloat(val) || 0; saveState(); render(); }
-function updateCusto(i, val)   { custos[i]  = parseFloat(val) || 0; saveState(); render(); }
+function updatePreco(key, val) { precos[key] = parseFloat(val) || 0; render(); }
+function updateCusto(i, val)   { custos[i]  = parseFloat(val) || 0; render(); }
 
 // ── FÓRMULAS ─────────────────────────────────────────────────────
 // 1. Particular sem desconto:
