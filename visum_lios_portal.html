@@ -314,7 +314,7 @@ function renderTiers(tiers){
             <tr><th></th><th>Normal</th><th>À vista (6%)</th></tr>
           </thead>
           <tbody>
-            <tr><td class="row-label">Particular (puro)</td><td>${r.puro||'—'}</td><td class="pct-avista">${r.avista||'—'}</td></tr>
+            <tr><td class="row-label">Particular</td><td>${r.puro||'—'}</td><td class="pct-avista">${r.avista||'—'}</td></tr>
             <tr><td class="row-label">GEAP</td><td class="${pctClass(r.geap)}">${r.geap||'—'}</td><td class="pct-avista ${pctClass(r.geapAvista)}">${r.geapAvista||'—'}</td></tr>
             <tr><td class="row-label">POSTAL SAÚDE</td><td class="${pctClass(r.postal)}">${r.postal||'—'}</td><td class="pct-avista ${pctClass(r.postalAvista)}">${r.postalAvista||'—'}</td></tr>
             <tr><td class="row-label">CELOS</td><td class="${pctClass(r.celos)}">${r.celos||'—'}</td><td class="pct-avista ${pctClass(r.celosAvista)}">${r.celosAvista||'—'}</td></tr>
@@ -372,6 +372,7 @@ function parseCSV(text){
     });
   });
 
+  tiers.forEach(t=>{ t.rows = t.rows.filter(r=>!r.isAvg); });
   return tiers.filter(t=>t.rows.length>0);
 }
 
