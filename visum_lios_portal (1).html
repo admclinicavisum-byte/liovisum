@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visum · Prateleiras LIOS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root{
+    --ink:#12232C;
+    --ink-soft:#28414E;
+    --paper:#F6F3EC;
+    --card:#FFFFFF;
+    --lens:#3D7C93;
+    --iris:#1E5C52;
+    --amber:#B5722C;
+    --line:#DCD5C6;
+    --muted:#6B7280;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);}
+  body{
+    font-family:'Inter','Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  @font-face{
+    font-family:'FrauncesLocal';
+    src:local('Fraunces');
+  }
+  .fx-display{
+    font-family:'Georgia', 'Iowan Old Style', serif;
+    font-optical-sizing:auto;
+  }
+  .mono{ font-family:'SFMono-Regular','IBM Plex Mono',ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; }
+
+  header.top{
+    padding:44px 24px 28px;
+    max-width:1080px;
+    margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--lens);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--iris);
+    box-shadow:0 0 0 3px rgba(30,92,82,0.15);
+  }
+  h1.fx-display{
+    font-size:clamp(30px,4.4vw,44px);
+    margin:12px 0 6px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  .sub{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:640px;
+    line-height:1.5;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-top:18px;
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .meta-row span{ display:flex; align-items:center; gap:6px; }
+  .meta-row b{ color:var(--ink); font-weight:600; }
+
+  main{ max-width:1080px; margin:0 auto; padding:32px 24px 100px; }
+
+  /* Lens ring signature */
+  .ring-mark{
+    position:relative;
+    width:34px;height:34px;
+    flex:0 0 auto;
+  }
+  .ring-mark svg{ width:100%; height:100%; display:block; }
+
+  .status{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--card);
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin-bottom:28px;
+  }
+  .status.err{ border-color:#D9A05B; background:#FBF1E4; color:#7A4A16; }
+  .spinner{
+    width:14px;height:14px;border-radius:50%;
+    border:2px solid var(--line); border-top-color:var(--lens);
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .tier{
+    margin-bottom:40px;
+  }
+  .tier-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    padding-bottom:12px;
+    border-bottom:2px solid var(--ink);
+    margin-bottom:16px;
+  }
+  .tier-head .tier-name{
+    font-family:'Georgia',serif;
+    font-size:21px;
+    font-weight:600;
+  }
+  .tier-head .tier-price{
+    font-family:'SFMono-Regular','IBM Plex Mono',ui-monospace,monospace;
+    font-size:15px;
+    color:var(--lens);
+    font-weight:600;
+  }
+
+  .lens-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .lens-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 20px;
+    transition:box-shadow .15s ease, transform .15s ease;
+  }
+  .lens-card:hover{
+    box-shadow:0 6px 20px rgba(18,35,44,0.08);
+    transform:translateY(-1px);
+  }
+  .lens-card.avg{
+    background:transparent;
+    border-style:dashed;
+    opacity:0.75;
+  }
+
+  .lens-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .lens-name{
+    font-size:16.5px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .lens-supplier{
+    font-size:12px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-top:2px;
+  }
+  .lens-cost{
+    text-align:right;
+  }
+  .lens-cost .label{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+  }
+  .lens-cost .value{
+    font-family:'SFMono-Regular','IBM Plex Mono',ui-monospace,monospace;
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink);
+  }
+
+  table.matrix{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+  }
+  table.matrix th{
+    text-align:right;
+    font-weight:600;
+    color:var(--muted);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    padding:6px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  table.matrix th:first-child, table.matrix td:first-child{ text-align:left; }
+  table.matrix td{
+    text-align:right;
+    padding:7px 8px;
+    font-family:'SFMono-Regular','IBM Plex Mono',ui-monospace,monospace;
+    border-bottom:1px solid #EFEBE0;
+  }
+  table.matrix tr:last-child td{ border-bottom:none; }
+  .row-label{
+    font-family:'Inter',sans-serif !important;
+    color:var(--ink-soft);
+    font-weight:500;
+  }
+  .pct-avista{ color:var(--iris); font-weight:600; }
+  .pct-low{ color:var(--amber); }
+
+  footer{
+    max-width:1080px; margin:0 auto; padding:0 24px 60px;
+    color:var(--muted); font-size:12px; line-height:1.6;
+  }
+  footer a{ color:var(--lens); }
+
+  @media (max-width:640px){
+    .lens-top{ flex-direction:column; }
+    .lens-cost{ text-align:left; }
+    table.matrix{ font-size:11.5px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="eyebrow"><span class="dot"></span>VISUM OFTALMOLOGIA — SÓCIOS MÉDICOS</div>
+  <h1 class="fx-display">Prateleiras de LIOS</h1>
+  <p class="sub">Acompanhamento em tempo real dos preços de venda, últimos custos de compra e percentuais de repasse por convênio para lentes intraoculares.</p>
+  <div class="meta-row">
+    <span><span class="ring-mark" style="width:16px;height:16px;">
+      <svg viewBox="0 0 34 34"><circle cx="17" cy="17" r="14" fill="none" stroke="#3D7C93" stroke-width="2"/><circle cx="17" cy="17" r="7" fill="none" stroke="#1E5C52" stroke-width="2"/></svg>
+    </span> Fonte: Planilha oficial Visum</span>
+    <span>Atualizado ao carregar a página</span>
+    <span id="lastload">—</span>
+  </div>
+</header>
+
+<main>
+  <div id="status" class="status"><div class="spinner"></div><span>Carregando dados da planilha…</span></div>
+  <div id="content"></div>
+</main>
+
+<footer>
+  Este portal lê os dados diretamente da planilha do Google Sheets a cada carregamento — os valores exibidos são sempre os mais recentes publicados pela clínica. Em caso de divergência, a planilha original é a fonte de referência.
+</footer>
+
+<script>
+const SHEET_ID = "1ZUR25qCWM7pOOF6xxK5Rl8sLbtu9OK--";
+const GID = "953422911";
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+
+const statusEl = document.getElementById('status');
+const contentEl = document.getElementById('content');
+const lastLoadEl = document.getElementById('lastload');
+
+function cleanNum(s){
+  if(!s) return null;
+  return s.trim();
+}
+
+function pctClass(v){
+  const n = parseFloat((v||'').replace('%','').replace(',','.'));
+  if(isNaN(n)) return '';
+  if(n < 0) return 'pct-low';
+  return '';
+}
+
+function renderTiers(tiers){
+  contentEl.innerHTML = '';
+  tiers.forEach(tier=>{
+    const section = document.createElement('section');
+    section.className = 'tier';
+
+    const head = document.createElement('div');
+    head.className = 'tier-head';
+    head.innerHTML = `<span class="tier-name fx-display">${tier.name}</span><span class="tier-price mono">${tier.price || ''}</span>`;
+    section.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'lens-grid';
+
+    tier.rows.forEach(r=>{
+      const card = document.createElement('div');
+      card.className = 'lens-card' + (r.isAvg ? ' avg' : '');
+      card.innerHTML = `
+        <div class="lens-top">
+          <div>
+            <div class="lens-name">${r.nome}</div>
+            <div class="lens-supplier">${r.fornecedor || ''}</div>
+          </div>
+          <div class="lens-cost">
+            <div class="label">Último custo de compra</div>
+            <div class="value">${r.custo || '—'}</div>
+          </div>
+        </div>
+        <table class="matrix">
+          <thead>
+            <tr><th></th><th>Normal</th><th>À vista (6%)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="row-label">Particular</td><td>${r.puro||'—'}</td><td class="pct-avista">${r.avista||'—'}</td></tr>
+            <tr><td class="row-label">GEAP</td><td class="${pctClass(r.geap)}">${r.geap||'—'}</td><td class="pct-avista ${pctClass(r.geapAvista)}">${r.geapAvista||'—'}</td></tr>
+            <tr><td class="row-label">POSTAL SAÚDE</td><td class="${pctClass(r.postal)}">${r.postal||'—'}</td><td class="pct-avista ${pctClass(r.postalAvista)}">${r.postalAvista||'—'}</td></tr>
+            <tr><td class="row-label">CELOS</td><td class="${pctClass(r.celos)}">${r.celos||'—'}</td><td class="pct-avista ${pctClass(r.celosAvista)}">${r.celosAvista||'—'}</td></tr>
+            <tr><td class="row-label">UNIMED</td><td class="${pctClass(r.unimed)}">${r.unimed||'—'}</td><td class="pct-avista ${pctClass(r.unimedAvista)}">${r.unimedAvista||'—'}</td></tr>
+          </tbody>
+        </table>
+      `;
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    contentEl.appendChild(section);
+  });
+}
+
+function parseCSV(text){
+  const parsed = Papa.parse(text.trim(), { skipEmptyLines:false }).data;
+  const tiers = [];
+  let current = null;
+
+  parsed.forEach(row=>{
+    const c0 = (row[0]||'').trim();
+
+    if(/^LIOS - R\$/i.test(c0)){
+      current = { name: c0, price: c0.replace('LIOS - ',''), rows: [] };
+      tiers.push(current);
+      return;
+    }
+    if(c0 === 'Revisado em:' || /^\d{2}\/\d{2}\/\d{4}$/.test(c0)){
+      current = null; // stop capturing after this table ends
+      return;
+    }
+    if(c0 === 'ÚLTIMA COMPRA' || c0.toUpperCase()==='FORNECEDOR' ) return;
+    if(!current) return;
+    if(c0 === '' ) return;
+    if((row[1]||'').trim() === 'ÚLTIMA COMPRA') return; // repeated header row
+
+    const isAvg = /^M[ée]dia/i.test(c0);
+
+    current.rows.push({
+      nome: c0,
+      custo: cleanNum(row[1]),
+      fornecedor: cleanNum(row[2]),
+      puro: cleanNum(row[3]),
+      avista: cleanNum(row[4]),
+      geap: cleanNum(row[5]),
+      geapAvista: cleanNum(row[6]),
+      postal: cleanNum(row[7]),
+      postalAvista: cleanNum(row[8]),
+      celos: cleanNum(row[9]),
+      celosAvista: cleanNum(row[10]),
+      unimed: cleanNum(row[11]),
+      unimedAvista: cleanNum(row[12]),
+      isAvg
+    });
+  });
+
+  tiers.forEach(t=>{ t.rows = t.rows.filter(r=>!r.isAvg); });
+  return tiers.filter(t=>t.rows.length>0);
+}
+
+async function load(){
+  try{
+    const res = await fetch(CSV_URL);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const tiers = parseCSV(text);
+    if(tiers.length === 0) throw new Error('Nenhum dado encontrado — verifique a estrutura da aba.');
+    renderTiers(tiers);
+    statusEl.style.display = 'none';
+    lastLoadEl.textContent = 'Carregado em ' + new Date().toLocaleString('pt-BR');
+  }catch(err){
+    statusEl.className = 'status err';
+    statusEl.innerHTML = `<span>⚠️ Não foi possível carregar os dados automaticamente (${err.message}). Confirme que a planilha está compartilhada como "Qualquer pessoa com o link — Leitor", ou peça a atualização do link ao administrador.</span>`;
+  }
+}
+
+load();
+</script>
+</body>
+</html>
